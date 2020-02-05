@@ -1,0 +1,119 @@
+<%- include("header.ejs") -%>    
+<div class="container jumbotron">
+  <div class="row">
+    <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3>Add User</h3></div>
+      <div class="panel-body">
+        <form action="/save" method='POST' enctype="multipart/form-data" >
+          <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="firstname">First Name</label>
+                  <input type="hidden" class="form-control" id="member_id" name="member_id" value="">
+                  <input type="text" class="form-control" id="firstname" placeholder="Enter FirstName" name="firstname" value="">
+                </div>
+                <!--<div class="form-group">
+                  <label for="Email">Email ID</label>
+                  <input type="text" class="form-control" id="email" placeholder="Enter Email" name="email" value="">
+                </div>
+                <div class="form-group">
+                  <label for="Gender">Gender</label>
+                  <input type="text" class="form-control" id="gender" placeholder="Enter Gender" name="gender" value="">
+                </div>-->
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <label for="lastname">User Image</label>
+                      <input type="file" class="form-control" id="myfile" name="myfile" >
+                    </div>
+                    <div class="col-sm-3">
+                      <span class="image-div"></span>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" class="form-control" id="lastname" placeholder="Enter LastName" name="lastname"  value="">
+              </div>
+              <!--<div class="form-group">
+                <label for="Mobile">Mobile Number</label>
+                <input type="text" class="form-control" id="mobile"  name="mobile"  value="">
+              </div>
+              <div class="form-group">
+                <label for="Address">Address</label>
+                <textarea rows="5" cols="50"  class="form-control" placeholder="Enter Address...">
+                </textarea>
+              </div>-->
+            </div>
+          </div>
+          <button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button>
+       </form>
+      </div>
+   </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3>List User</h3></div>
+        <div class="panel-body">
+            <form action="">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                      <th>UserImage</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <% membersList.forEach(function(index, members){ %>
+                  <tr>
+                    <td><%= index.FirstName %></td>
+                    <td><%= index.LastName %></td>
+                      <td><img src="./uploads/<%= index.UserImage %>" alt="test" height="100" width="80"> </td>
+                    <td>
+                      <a href="javascript:;" class="btn btn-primary a-btn-slide-text glyphicon glyphicon-edit update" aria-hidden="true" data-id="<%= index.id %>" data-firstname="<%= index.FirstName %>" data-lastname="<%= index.LastName %>" data-userimage="<%= index.UserImage %>"  aria-hidden="true">
+                        <strong>Edit</strong>
+                     </a>
+                     <a href="javascript:;" class="btn btn-primary a-btn-slide-text delete glyphicon glyphicon-trash" data-id="<%= index.id %>" aria-hidden="true">
+                      <strong>Delete</strong>
+                    </a>
+                    </td>
+                  </tr>
+                <% }); %>
+                </tbody>
+              </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form id="add-row-form" action="/delete" method="GET">
+   <div class="modal fade" id="DeleteMembersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+         <div class="modal-content">
+             <div class="modal-header">
+                <h3 class="modal-title" id="myModalLabel">Delete Member</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             </div>
+             <div class="modal-body">
+                     <strong>Are You Sure To Delete This Member?</strong>
+             </div>
+             <div class="modal-footer">
+                  <input type="hidden" name="member_id" class="form-control member_ids" value='' required>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-success">Delete</button>
+             </div>
+          </div>
+      </div>
+   </div>
+</form>
+<%- include("footer.ejs") -%>     
