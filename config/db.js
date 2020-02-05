@@ -11,4 +11,21 @@ connection.connect((err) => {
     if (err) throw err;
 	
 });
-module.exports = connection;
+
+
+const queryForExecution = (sqlQuery) => {
+	return new Promise(function(resolve, reject){
+		
+		connection.query(sqlQuery, (err, result) => {
+        if (err) throw err;
+			resolve(JSON.parse(JSON.stringify(result)));
+		});
+		
+		
+	});
+};
+
+module.exports = {
+	connection,
+	queryForExecution
+};

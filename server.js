@@ -3,6 +3,9 @@ const app = express();
 const path = require('path');
 const connection = require('./config/db.js');
 const bodyParser = require('body-parser');
+const upload = require('./file_system/multer.js');
+var server = require('./common/common-functions.js');
+
 const port = 3000;
 const tableName = 'member';
 app.set('view engine', 'ejs');
@@ -12,30 +15,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-//---- File Upload Code start
-const multer  =   require('multer');
-const storage =   multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './views/uploads');
-  },
-  filename: function (req, file, callback) {
-    callback(null, file.originalname);
-  }
-});
-
-const upload = multer({ storage : storage}).single('myfile');
-//---- File Upload Code end
-
-var server = require('./common/common-functions.js');
-
-
 
 app.listen(port, function(){
 	console.log('Server is up and running on server  http://localhost:' + port);
 });
 // GET ALL USERS
 app.get('/', (req, res) => {
-	var result = server.getAllRecords(connection, tableName);
+	var postData = {};
+	var action = 'SELECT';
+	var result = server.selectDeleteRecords(connection, tableName, postData, action);
 	result.then(function(result) {
 			res.render('member',{
 				membersList:result
@@ -68,17 +56,19 @@ app.post('/save', (req, res) => {
 		if(err) {
 			  res.send('Error in File Uploading....');
 		}
-		var postParameters = new Object;
-		postParameters.FirstName = req.body.firstname;
-		postParameters.LastName = req.body.lastname;
-		postParameters.UserImage = req.file.originalname;
+		var postData = {};
+		postData.FirstName = req.body.firstname;
+		postData.LastName = req.body.lastname;
+		postData.UserImage = req.file.originalname;
 		
-		var postParametersforCondition = new Object;
-		postParametersforCondition.id = req.body.member_id;
+		var condition = {};
+		condition.id = req.body.member_id;
 		if (req.body.member_id > 0) {
-			 var result = server.updateRecords(connection, tableName, postParameters, postParametersforCondition);
+			var action = 'UPDATE';
+			var result = server.addUpdateRecords(connection, tableName, postData, action, condition);
 		} else {
-			var result = server.addRecords(connection, tableName, postParameters);
+			var action = 'INSERT';
+			var result = server.addUpdateRecords(connection, tableName, postData, action, condition);
 		}
 	   
 		result.then(function(result) {
@@ -96,9 +86,10 @@ app.post('/save', (req, res) => {
 
 // USER DELETING
 app.get('/delete', (req, res) => {
-	var postParametersforCondition = new Object;
-	postParametersforCondition.id = req.query.member_id;
-	var result = server.deleteRecord(connection, tableName, postParametersforCondition);
+	var postData = {};
+	postData.id = req.query.member_id;
+	var action = 'DELETE';
+	var result = server.selectDeleteRecords(connection, tableName, postData, action);
 	result.then(function(result) {
 	   if (result == 1) {
 			console.log('User Deleted Successfully');
