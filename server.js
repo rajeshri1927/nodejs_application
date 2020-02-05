@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 });
 
 // USER INSERTING
-app.post('/',(req, res) => {
+/* app.post('/',(req, res) => {
 	
 	const postParameters = {
         FirstName: req.body.firstname,
@@ -46,7 +46,7 @@ app.post('/',(req, res) => {
 			return res.redirect('/');
 		}
 	});	
-});
+}); */
 
 
 // USER UPDATING
@@ -71,8 +71,8 @@ app.post('/save', (req, res) => {
 			var result = server.addUpdateRecords(connection, tableName, postData, action, condition);
 		}
 	   
-		result.then(function(result) {
-		   if (result == 1) {
+		result.then(function(result) { 
+		   if (result.affectedRows == 1) {
 				return res.redirect("http://" + req.headers['host']);
 			}
 			else {
@@ -90,8 +90,10 @@ app.get('/delete', (req, res) => {
 	postData.id = req.query.member_id;
 	var action = 'DELETE';
 	var result = server.selectDeleteRecords(connection, tableName, postData, action);
-	result.then(function(result) {
-	   if (result == 1) {
+	
+	
+	result.then(function(result) { console.log(result);
+	   if (result.affectedRows == 1) {
 			console.log('User Deleted Successfully');
 			return res.redirect('/');
 		}

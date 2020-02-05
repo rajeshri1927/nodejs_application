@@ -156,8 +156,8 @@ const addUpdateRecords = (connection, tableName, postData, action, condition) =>
 		var columns = Object.keys(postData);
 		var values = Object.values(postData);
 		sqlQuery += " (" + columns + ")";
-		sqlQuery += " VALUES ('" + values + "')";
-
+		sqlQuery += " VALUES (" + values.map(d => `'${d}'`).join(',') + ")";
+		
 	}
 	return result = connection.queryForExecution(sqlQuery);
 
