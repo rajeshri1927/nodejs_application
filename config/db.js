@@ -1,17 +1,21 @@
 const mysql = require('mysql');
 
+const hostName = 'localhost';
+const userName = 'root';
+const userPassword = '';
+const databaseName = 'membersdb';
+
 const connection = mysql.createConnection({
-    host     : 'localhost', // MYSQL HOST NAME
-    user     : 'root',        // MYSQL USERNAME
-    password : '',    // MYSQL PASSWORD
-    database : 'membersdb'      // MYSQL DB NAME
+    host     : hostName, // MYSQL HOST NAME
+    user     : userName,        // MYSQL USERNAME
+    password : userPassword,    // MYSQL PASSWORD
+    database : databaseName      // MYSQL DB NAME
 });
 
 connection.connect((err) => {
     if (err) throw err;
 	
 });
-
 
 const queryForExecution = (sqlQuery) => {
 	return new Promise(function(resolve, reject){
